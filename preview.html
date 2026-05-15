@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trắc nghiệm Hàm Số</title>
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']]
+      }
+    };
+  </script>
+
+  <script defer
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      background: #f3f7ff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1{
+      text-align: center;
+      color: #1e3a8a;
+    }
+
+    .quiz-container{
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .question{
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .question h3{
+      margin-top: 0;
+      color: #111827;
+    }
+
+    .option{
+      display: block;
+      width: 100%;
+      text-align: left;
+      margin: 10px 0;
+      padding: 12px;
+      border: 2px solid #d1d5db;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #fff;
+      transition: 0.3s;
+      font-size: 16px;
+    }
+
+    .option:hover{
+      background: #eef2ff;
+    }
+
+    .correct{
+      background: #bbf7d0 !important;
+      border-color: green !important;
+      color: green;
+    }
+
+    .wrong{
+      background: #fecaca !important;
+      border-color: red !important;
+      color: red;
+    }
+
+    .answer-box{
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #f9fafb;
+      display: none;
+    }
+
+    .answer{
+      font-weight: bold;
+      color: #2563eb;
+    }
+
+    .explanation{
+      margin-top: 8px;
+      color: #374151;
+    }
+
+    .score{
+      text-align: center;
+      font-size: 24px;
+      margin: 30px 0;
+      color: #111827;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>ĐỀ THI TRẮC NGHIỆM HÀM SỐ</h1>
+
+  <div class="score">
+    Điểm: <span id="score">0</span> / 15
+  </div>
+
+  <div class="quiz-container" id="quiz"></div>
+
+<script>
+
+const questions = [
+
+{
+  question: "1. Miền xác định của hàm số \\( y = \\dfrac{1}{x-2} \\) là:",
+  options: [
+    "\\( \\mathbb{R} \\)",
+    "\\( \\mathbb{R} \\setminus \\{2\\} \\)",
+    "\\( x > 2 \\)",
+    "\\( x < 2 \\)"
+  ],
+  correct: 1,
+  explanation: "Mẫu số phải khác 0 nên \\(x-2 \\neq 0 \\Rightarrow x \\neq 2\\)."
+},
+
+{
+  question: "2. Miền xác định của hàm số \\( y = \\sqrt{x+3} \\) là:",
+  options: [
+    "\\( x > -3 \\)",
+    "\\( x \\ge -3 \\)",
+    "\\( x < -3 \\)",
+    "\\( \\mathbb{R} \\)"
+  ],
+  correct: 1,
+  explanation: "Biểu thức trong căn phải không âm: \\(x+3 \\ge 0\\)."
+},
+
+{
+  question: "3. Hàm số nào là hàm chẵn?",
+  options: [
+    "\\( f(x)=x^3 \\)",
+    "\\( f(x)=x^2 \\)",
+    "\\( f(x)=x+1 \\)",
+    "\\( f(x)=2x^5 \\)"
+  ],
+  correct: 1,
+  explanation: "Vì \\(f(-x)=(-x)^2=x^2=f(x)\\)."
+},
+
+{
+  question: "4. Hàm số nào là hàm lẻ?",
+  options: [
+    "\\( f(x)=x^3 \\)",
+    "\\( f(x)=x^2 \\)",
+    "\\( f(x)=x^2+1 \\)",
+    "\\( f(x)=|x| \\)"
+  ],
+  correct: 0,
+  explanation: "Ta có \\(f(-x)=(-x)^3=-x^3=-f(x)\\)."
+},
+
+{
+  question: "5. Miền giá trị của hàm số \\( y=x^2 \\) là:",
+  options: [
+    "\\( y>0 \\)",
+    "\\( y\\ge0 \\)",
+    "\\( y<0 \\)",
+    "\\( \\mathbb{R} \\)"
+  ],
+  correct: 1,
+  explanation: "Bình phương luôn không âm nên \\(y \\ge 0\\)."
+},
+
+{
+  question: "6. Đồ thị nào sau đây KHÔNG phải đồ thị của hàm số?",
+  options: [
+    "Parabol",
+    "Đường thẳng đứng",
+    "Đường thẳng xiên",
+    "Đồ thị sin"
+  ],
+  correct: 1,
+  explanation: "Đường thẳng đứng cắt trục tung tại vô số điểm nên không thỏa định nghĩa hàm số."
+},
+
+{
+  question: "7. Miền xác định của hàm số \\( y=\\dfrac{1}{x^2-9} \\) là:",
+  options: [
+    "\\( x\\neq3 \\)",
+    "\\( x\\neq-3 \\)",
+    "\\( x\\neq\\pm3 \\)",
+    "\\( \\mathbb{R} \\)"
+  ],
+  correct: 2,
+  explanation: "Mẫu số khác 0: \\(x^2-9 \\neq 0 \\Rightarrow x \\neq \\pm3\\)."
+},
+
+{
+  question: "8. Hàm số \\(f(x)=|x|\\) là:",
+  options: [
+    "Hàm lẻ",
+    "Hàm chẵn",
+    "Không chẵn không lẻ",
+    "Không xác định"
+  ],
+  correct: 1,
+  explanation: "Ta có \\(|-x|=|x|\\)."
+},
+
+{
+  question: "9. Miền xác định của \\( y=\\sqrt{5-x} \\) là:",
+  options: [
+    "\\( x<5 \\)",
+    "\\( x\\le5 \\)",
+    "\\( x>5 \\)",
+    "\\( x\\ge5 \\)"
+  ],
+  correct: 1,
+  explanation: "Điều kiện căn: \\(5-x \\ge 0 \\Rightarrow x \\le 5\\)."
+},
+
+{
+  question: "10. Miền giá trị của hàm số \\( y=-x^2 \\) là:",
+  options: [
+    "\\( y\\le0 \\)",
+    "\\( y\\ge0 \\)",
+    "\\( \\mathbb{R} \\)",
+    "\\( y<0 \\)"
+  ],
+  correct: 0,
+  explanation: "Vì \\(-x^2 \\le 0\\) với mọi x."
+},
+
+{
+  question: "11. Hàm số \\( f(x)=x^4+1 \\) là:",
+  options: [
+    "Hàm lẻ",
+    "Hàm chẵn",
+    "Không chẵn không lẻ",
+    "Không xác định"
+  ],
+  correct: 1,
+  explanation: "Ta có \\(f(-x)=(-x)^4+1=x^4+1=f(x)\\)."
+},
+
+{
+  question: "12. Đường tròn có phải là đồ thị hàm số không?",
+  options: [
+    "Có",
+    "Không",
+    "Chỉ khi bán kính bằng 1",
+    "Chỉ khi tâm O"
+  ],
+  correct: 1,
+  explanation: "Một giá trị x có thể có 2 giá trị y nên không phải hàm số."
+},
+
+{
+  question: "13. Miền xác định của hàm số \\( y=\\dfrac{\\sqrt{x-1}}{x-4} \\) là:",
+  options: [
+    "\\( x\\ge1, x\\neq4 \\)",
+    "\\( x>1 \\)",
+    "\\( x\\ge4 \\)",
+    "\\( \\mathbb{R} \\)"
+  ],
+  correct: 0,
+  explanation: "Điều kiện căn: \\(x\\ge1\\), mẫu khác 0: \\(x\\neq4\\)."
+},
+
+{
+  question: "14. Hàm số \\(f(x)=2x+1\\) là:",
+  options: [
+    "Hàm chẵn",
+    "Hàm lẻ",
+    "Không chẵn không lẻ",
+    "Vừa chẵn vừa lẻ"
+  ],
+  correct: 2,
+  explanation: "Không thỏa \\(f(-x)=f(x)\\) hay \\(f(-x)=-f(x)\\)."
+},
+
+{
+  question: "15. Miền giá trị của hàm số \\( y=|x| \\) là:",
+  options: [
+    "\\( y\\ge0 \\)",
+    "\\( y\\le0 \\)",
+    "\\( \\mathbb{R} \\)",
+    "\\( y>0 \\)"
+  ],
+  correct: 0,
+  explanation: "Giá trị tuyệt đối luôn không âm."
+}
+
+];
+
+const quizContainer = document.getElementById("quiz");
+let score = 0;
+
+questions.forEach((q, index) => {
+
+  const div = document.createElement("div");
+  div.className = "question";
+
+  let html = `<h3>${q.question}</h3>`;
+
+  q.options.forEach((opt, i) => {
+    html += `
+      <button class="option" onclick="checkAnswer(this, ${index}, ${i})">
+        ${opt}
+      </button>
+    `;
+  });
+
+  html += `
+    <div class="answer-box" id="answer-${index}">
+      <div class="answer">
+        Đáp án đúng: ${q.options[q.correct]}
+      </div>
+      <div class="explanation">
+        ${q.explanation}
+      </div>
+    </div>
+  `;
+
+  div.innerHTML = html;
+  quizContainer.appendChild(div);
+
+});
+
+function checkAnswer(button, qIndex, selected){
+
+  const questionDiv = button.parentElement;
+  const buttons = questionDiv.querySelectorAll(".option");
+  const answerBox = document.getElementById(`answer-${qIndex}`);
+
+  if(questionDiv.classList.contains("done")) return;
+
+  questionDiv.classList.add("done");
+
+  buttons.forEach(btn => btn.disabled = true);
+
+  if(selected === questions[qIndex].correct){
+    button.classList.add("correct");
+    score++;
+  } else {
+    button.classList.add("wrong");
+    buttons[questions[qIndex].correct].classList.add("correct");
+  }
+
+  document.getElementById("score").innerText = score;
+
+  answerBox.style.display = "block";
+
+  MathJax.typesetPromise();
+}
+
+</script>
+
+</body>
+</html>
